@@ -13,14 +13,24 @@ const io = socketIO(server); //http://localhost:3000/socket.io/socket.io.js
 app.use(express.static(publicPath))
 
 //listening to an even on socket
-io.on('connection', (socket) => {
+io.on('connection', function (socket) {
   console.log('New User connected')
 
-  socket.on('disconnect', () => {
+  socket.emit('newMessage', {
+    'from': 'kaju@example.com',
+    'text': 'lets plan out something',
+    'createdAt': 1234
+  })
+
+socket.on('createMessage', (message) => {
+  console.log('createMessage ', message)
+})
+  
+  socket.on('disconnect', function () {
     console.log('User was disconnected')
   })
 })
 
-server.listen(port , () => {
+server.listen(port, function () {
   console.log(`Server started on port ${port}`)
 })
